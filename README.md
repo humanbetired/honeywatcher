@@ -62,19 +62,19 @@ Attacker
 
 ```
 honeywatcher/
-├── main.py                  # Entry point — launches all services
-├── database.py              # DB init and connection helper
+├── main.py              
+├── database.py           
 ├── requirements.txt
 ├── .env.example
 ├── services/
-│   ├── ssh_honeypot.py      # Fake SSH server
-│   ├── http_honeypot.py     # Fake HTTP server
-│   └── ftp_honeypot.py      # Fake FTP server
+│   ├── ssh_honeypot.py    
+│   ├── http_honeypot.py   
+│   └── ftp_honeypot.py      
 ├── analyzer/
-│   ├── geoip.py             # IP geolocation lookup
-│   └── ai_profiler.py       # Claude API attacker profiling
+│   ├── geoip.py             
+│   └── ai_profiler.py       
 └── dashboard/
-    ├── app.py               # Flask routes and API
+    ├── app.py               
     ├── templates/
     │   └── index.html
     └── static/
