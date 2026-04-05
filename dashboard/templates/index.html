@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoneyWatch Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="shell">
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <h1>HoneyWatch</h1>
+                <p>Multi-Service Honeypot</p>
+            </div>
+            <a class="nav-item active" onclick="showSection('overview', this)">
+                <span class="nav-dot"></span> Overview
+            </a>
+            <a class="nav-item" onclick="showSection('attacks', this)">
+                <span class="nav-dot"></span> Attack Log
+            </a>
+            <a class="nav-item" onclick="showSection('profiles', this)">
+                <span class="nav-dot"></span> Attacker Profiles
+            </a>
+            <a class="nav-item" onclick="showSection('credentials', this)">
+                <span class="nav-dot"></span> Credentials
+            </a>
+            <a class="nav-item" onclick="showSection('map', this)">
+                <span class="nav-dot"></span> World Map
+            </a>
+            <div class="sidebar-footer">
+                HoneyWatch v1.0<br>
+                <span id="footer-date"></span>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- Overview -->
+            <div id="section-overview">
+                <div class="page-header">
+                    <div>
+                        <h2>Overview</h2>
+                        <p>Realtime honeypot activity monitor</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="profileNow()">Run AI Profiler</button>
+                </div>
+
+                <div class="metrics">
+                    <div class="metric m-total">
+                        <div class="metric-label">Total Attacks</div>
+                        <div class="metric-value" id="m-total">--</div>
+                    </div>
+                    <div class="metric m-critical">
+                        <div class="metric-label">Unique IPs</div>
+                        <div class="metric-value" id="m-ips">--</div>
+                    </div>
+                    <div class="metric m-high">
+                        <div class="metric-label">SSH Attempts</div>
+                        <div class="metric-value" id="m-ssh">--</div>
+                    </div>
+                    <div class="metric m-medium">
+                        <div class="metric-label">HTTP Probes</div>
+                        <div class="metric-value" id="m-http">--</div>
+                    </div>
+                    <div class="metric m-low">
+                        <div class="metric-label">FTP Attempts</div>
+                        <div class="metric-value" id="m-ftp">--</div>
+                    </div>
+                    <div class="metric m-ransom">
+                        <div class="metric-label">AI Profiled</div>
+                        <div class="metric-value" id="m-profiled">--</div>
+                    </div>
+                </div>
+
+                <div class="charts">
+                    <div class="chart-card">
+                        <div class="chart-title">Service Distribution</div>
+                        <div class="chart-wrap"><canvas id="chart-service"></canvas></div>
+                    </div>
+                    <div class="chart-card wide">
+                        <div class="chart-title">Attack Trend (last 24h)</div>
+                        <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+                    </div>
+                    <div class="chart-card wide">
+                        <div class="chart-title">Top 10 Attacker IPs</div>
+                        <div class="chart-wrap" style="height:200px"><canvas id="chart-ips"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attack Log -->
+            <div id="section-attacks" style="display:none">
+                <div class="page-header">
+                    <div>
+                        <h2>Attack Log</h2>
+                        <p>Latest 100 attack attempts</p>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Attacks</h3>
+                        <input class="search-box" id="attack-search" placeholder="Search IP, path, username..."
+                            oninput="renderAttacks()">
+                    </div>
+                    <div class="filter-row">
+                        <button class="filter-btn f-all active" onclick="setAttackFilter('ALL',this)">All</button>
+                        <button class="filter-btn f-critical" onclick="setAttackFilter('SSH',this)">SSH</button>
+                        <button class="filter-btn f-high" onclick="setAttackFilter('HTTP',this)">HTTP</button>
+                        <button class="filter-btn f-medium" onclick="setAttackFilter('FTP',this)">FTP</button>
+                    </div>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Service</th>
+                                    <th>IP</th>
+                                    <th>Location</th>
+                                    <th>Username</th>
+                                    <th>Password / Path</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attack-tbody">
+                                <tr>
+                                    <td colspan="6" class="loading-row">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer" id="attack-footer">--</div>
+                </div>
+            </div>
+
+            <!-- Attacker Profiles -->
+            <div id="section-profiles" style="display:none">
+                <div class="page-header">
+                    <div>
+                        <h2>Attacker Profiles</h2>
+                        <p>AI-generated attacker behavior analysis</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="profileNow()">Run AI Profiler</button>
+                </div>
+                <div id="profiles-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+                    <div class="loading-row">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Credentials -->
+            <div id="section-credentials" style="display:none">
+                <div class="page-header">
+                    <div>
+                        <h2>Credentials</h2>
+                        <p>Most attempted usernames and passwords</p>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Top Usernames</h3>
+                        </div>
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Attempts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="username-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Top Passwords</h3>
+                        </div>
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Password</th>
+                                        <th>Attempts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="password-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- World Map -->
+        <div id="section-map" style="display:none">
+            <div class="page-header">
+                <div>
+                    <h2>World Map</h2>
+                    <p>Attacker origin visualization</p>
+                </div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+                <div id="map" style="height:520px;width:100%"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px">
+                <div class="metric m-total">
+                    <div class="metric-label">Countries</div>
+                    <div class="metric-value" id="m-countries">--</div>
+                </div>
+                <div class="metric m-critical">
+                    <div class="metric-label">Top Country</div>
+                    <div class="metric-value" style="font-size:16px" id="m-top-country">--</div>
+                </div>
+                <div class="metric m-high">
+                    <div class="metric-label">Mapped Attackers</div>
+                    <div class="metric-value" id="m-mapped">--</div>
+                </div>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+
+</html>
