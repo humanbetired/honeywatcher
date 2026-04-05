@@ -1,6 +1,3 @@
-## README.md untuk HoneyWatch
-
-```markdown
 # HoneyWatch
 
 Multi-service honeypot intelligence system with AI-powered attacker profiling and real-time dashboard.
@@ -154,7 +151,4 @@ This project is intended for educational and portfolio purposes only. Deploy onl
 
 ## Author
 
-Dibuat oleh Saya
-```
-
----
+Built as part of a Blue Team portfolio focused on threat detection and security engineering.
