@@ -151,4 +151,34 @@ This project is intended for educational and portfolio purposes only. Deploy onl
 
 ## Author
 
-Built as part of a Blue Team portfolio focused on threat detection and security engineering.
+Saya
+
+---
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>Overview Dashboard</b></td>
+    <td align="center"><b>Attack Log</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/a88b353e-d2ce-45f1-b645-6713c412335f" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/cc0129d9-6356-44d5-9a1d-e5d6bcb1f40d" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Attacker Profiles (AI)</b></td>
+    <td align="center"><b>Credentials Tracker</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/8ef7a0b5-6989-4e7d-ad1b-44ddf8459e99" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/bd60eb6b-da52-42da-bd32-d0604d2d28f6" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><b>World Map</b></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="https://github.com/user-attachments/assets/019b8482-398b-4544-ac3b-6d46cec75015" width="60%"/></td>
+  </tr>
+</table>
+
