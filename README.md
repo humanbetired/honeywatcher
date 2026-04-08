@@ -157,21 +157,21 @@ Saya
 
 ## Screenshots
 
-## Dashboard & Intelligence
+## Attack Analysis
 
-| AI Narrative | CVE Overview | CVE Table |
-|--------------|-------------|-----------|
-| ![](assets/AI_Narrative.png) | ![](assets/overview_cve.png) | ![](assets/cve_table.png) |
+| Overview | Attack Map |
+|----------|------------|
+| ![](assets/overview.png) | ![](assets/map.png) |
 
-## Alerts & Automation
+## Attack Details
 
-| n8n Automation | Threat News |
-|----------------|-------------|
-| ![](assets/n8n_automation_alert.png) | ![](assets/threat_news.png) |
+| Attack Profiles | Attack Logs |
+|-----------------|-------------|
+| ![](assets/attack_profiles.png) | ![](assets/attack_log.png) |
 
-## Reporting & Playbook
+## Credentials
 
-| PDF Report | Playbook |
-|------------|----------|
-| ![](assets/pdf_report.png) | ![](assets/playbook.png) |
+| Credentials |
+|-------------|
+| ![](assets/credentials.png) |
 
